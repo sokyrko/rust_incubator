@@ -16,5 +16,8 @@ jobs:
     if: ${{ github.repository_owner != 'instrumentisto' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/install-student-ci-deps
-        name: Cache dependencies
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: ./.github/actions/install-student-ci-deps
+
