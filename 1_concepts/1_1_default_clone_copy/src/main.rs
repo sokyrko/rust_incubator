@@ -16,6 +16,6 @@ mod tests {
     fn test_clone() {
         let a = String::from("Hello");
         let b = a.clone();
-        assert_eq!(a, b);
+        assert_eq!(a, b); // change here
     }
 }
