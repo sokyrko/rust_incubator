@@ -82,7 +82,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ${{ matrix.crate }}-${{ rust.outputs.rustc_hash }}
+          shared-key: ${{ matrix.crate }}-${{ jobs.rust.outputs.rustc_hash }}
 
       - name: Run tests on ${{ matrix.crate }}
         run: cargo test -p ${{ matrix.crate }}
