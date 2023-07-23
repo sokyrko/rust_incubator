@@ -80,6 +80,8 @@ jobs:
           override: true
           profile: minimal
 
+      # Cache dependencies by the crate name and the Rust version
+      # It does not save any cache if the crate does not have any dependencies
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: ${{ matrix.crate }}-${{ steps.rust.outputs.rustc_hash }}
