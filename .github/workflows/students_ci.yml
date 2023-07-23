@@ -2,13 +2,31 @@ name: Tests
 
 on:
   pull_request:
+  push:
+    branches:
+      # GitHub cache is scoped to the branch + default branch,
+      # This is not a problem for tasks, because those are usually done in one branch
+      # We need to cache tools we use on push to the default branch
+      # Otherwise, it CI takes too long to run
+      # See https://github.com/orgs/community/discussions/27059#discussioncomment-3254477
+      - master
+      - main
 
 env:
   CARGO_TERM_COLOR: always
+  IS_FORK: ${{ github.repository_owner != 'instrumentisto' && 'true' || 'false }}
+  IS_PR: ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
 
 jobs:
+  cache_tools:
+    if: ${{ env.IS_FORK == 'true' && env.IS_PR == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/install-student-ci-deps
+        name: Cache dependencies
+
   changed_crates:
-    if: ${{ github.repository_owner != 'instrumentisto' }}
+    if: ${{ env.IS_FORK == 'true' && env.IS_PR == 'true' }}
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
