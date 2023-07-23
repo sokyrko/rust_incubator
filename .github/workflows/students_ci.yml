@@ -19,14 +19,14 @@ env:
 
 jobs:
   cache_tools:
-    if: ${{ env.IS_FORK == 'true' && env.IS_PR == 'false' }}
+    if: env.IS_FORK == 'true' && env.IS_PR == 'false'
     runs-on: ubuntu-latest
     steps:
       - uses: ./.github/actions/install-student-ci-deps
         name: Cache dependencies
 
   changed_crates:
-    if: ${{ env.IS_FORK == 'true' && env.IS_PR == 'true' }}
+    if: env.IS_FORK == 'true' && env.IS_PR == 'true'
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
