@@ -80,12 +80,9 @@ jobs:
           override: true
           profile: minimal
 
-      # Cache dependencies by the crate name and the Rust version
-      # It does not save any cache if the crate does not have any dependencies
-      # It does not save cache from different crates, because `cargo test -p` does not build them
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ${{ matrix.crate }}-${{ steps.rust.outputs.rustc_hash }}
+          shared-key: ${{ matrix.crate }}-${{ rust.outputs.rustc_hash }}
 
       - name: Run tests on ${{ matrix.crate }}
         run: cargo test -p ${{ matrix.crate }}
