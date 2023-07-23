@@ -24,13 +24,13 @@ jobs:
       - name: Cache and Install toml-cli
         uses: taiki-e/cache-cargo-install-action@v1
         with:
-          tool: toml-cli
+          tool: toml-cli@0.2.3
 
       - name: Cache and Install xq
         uses: taiki-e/cache-cargo-install-action@v1
         with:
           # xq is jq but in Rust
-          tool: xq
+          tool: xq@0.2.44
 
       - name: Find changed crates
         id: crates
@@ -73,11 +73,19 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Rust
+        id: rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
           profile: minimal
+
+      # Cache dependencies by the crate name and the Rust version
+      # It does not save any cache if the crate does not have any dependencies
+      # It does not save cache from different crates, because `cargo test -p` does not build them
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ${{ matrix.crate }}-${{ steps.rust.outputs.rustc_hash }}
 
       - name: Run tests on ${{ matrix.crate }}
         run: cargo test -p ${{ matrix.crate }}
